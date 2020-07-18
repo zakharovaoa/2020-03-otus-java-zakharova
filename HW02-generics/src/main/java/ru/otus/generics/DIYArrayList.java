@@ -153,7 +153,19 @@ public class DIYArrayList<E> implements List<E> {
         if (s == itemData.length) {
             increase();
         }
+        itemData = offset(itemData, index, s - index);
+        itemData[index] = element;
+        size = s + 1;
+    }
 
+    private static Object[] offset (Object[] array, int index, int length) {
+        Object temp = array[index];
+        for (int i = index; i <= index + length; i++ ) {
+            Object temp1 = array[i + 1];
+            array[i + 1] = temp;
+            temp = temp1;
+        }
+        return array;
     }
 
     @Override
