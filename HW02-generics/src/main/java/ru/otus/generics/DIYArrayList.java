@@ -113,14 +113,6 @@ public class DIYArrayList<E> implements List<E> {
 
         @Override
         public E next() {
-            /*checkForComodification();
-            if (cursor >= size)
-                throw new NoSuchElementException();
-            if (cursor >= itemData.length)
-                throw new ConcurrentModificationException();
-            cursor ++;
-            lastRet = cursor;
-            return (E) DIYArrayList.this.itemData[lastRet];*/
             checkForComodification();
             int i = cursor;
             if (i >= size)
