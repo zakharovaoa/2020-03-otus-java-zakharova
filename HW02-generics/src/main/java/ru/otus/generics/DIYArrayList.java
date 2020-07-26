@@ -1,6 +1,7 @@
 package ru.otus.generics;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 public class DIYArrayList<E> implements List<E> {
@@ -15,9 +16,10 @@ public class DIYArrayList<E> implements List<E> {
 
     private int size;
 
+    private int modCount;
+
     public DIYArrayList() {
         this.itemData = INITIALCAPACITY_EMPTY_ITEMDATA;
-    //new Object[10];
     }
 
     public DIYArrayList(int beginCapacity) {
@@ -30,6 +32,19 @@ public class DIYArrayList<E> implements List<E> {
         }
     }
 
+    public DIYArrayList(Collection<? extends E> c) {
+        itemData = c.toArray();
+        size = itemData.length;
+        if (size != 0)
+            itemData = Arrays.copyOf(itemData, size, Object[].class);
+        else {
+            this.itemData = EMPTY_ITEMDATA;
+        }
+    }
+
+
+
+
     public void provideCapacity(int minCapacity) {
         if (itemData.length < minCapacity
             && minCapacity <= INITIAL_CAPACITY
@@ -38,10 +53,18 @@ public class DIYArrayList<E> implements List<E> {
         }
     }
 
+
+
+    private void checkIndex(int index, int length) {
+        if (index >= length || index < 0) {
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds for length " + length);
+        }
+    }
+
     private Object[] increase(int minCapacity) {
-        int oldcapacity = itemData.length;
-        if (itemData != INITIALCAPACITY_EMPTY_ITEMDATA || oldcapacity > 0) {
-            int newCapacity = (int) (oldcapacity * 1.5);
+        int oldCapacity = itemData.length;
+        if (itemData != INITIALCAPACITY_EMPTY_ITEMDATA || oldCapacity > 0) {
+            int newCapacity = (int) (oldCapacity * 1.5);
             return itemData = Arrays.copyOf(itemData, newCapacity);
         } else {
             return itemData = new Object[Math.max(INITIAL_CAPACITY, minCapacity)];
@@ -59,7 +82,7 @@ public class DIYArrayList<E> implements List<E> {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -69,12 +92,84 @@ public class DIYArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Itr();
     }
+
+    private class Itr implements Iterator<E> {
+        int cursor = 0;
+        int lastRet = -1;
+        int expectedModCount = modCount;
+
+        void checkForComodification() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor != size;
+        }
+
+        @Override
+        public E next() {
+            /*checkForComodification();
+            if (cursor >= size)
+                throw new NoSuchElementException();
+            if (cursor >= itemData.length)
+                throw new ConcurrentModificationException();
+            cursor ++;
+            lastRet = cursor;
+            return (E) DIYArrayList.this.itemData[lastRet];*/
+            checkForComodification();
+            int i = cursor;
+            if (i >= size)
+                throw new NoSuchElementException();
+            Object[] itemData = DIYArrayList.this.itemData;
+            if (i >= itemData.length)
+                throw new ConcurrentModificationException();
+            cursor = i + 1;
+            lastRet = i;
+            return (E) itemData[lastRet];
+        }
+
+        @Override
+        public void remove() {
+            checkForComodification();
+            if (lastRet < 0)
+                throw new IllegalStateException();
+            try {
+                DIYArrayList.this.remove(lastRet);
+                cursor = lastRet;
+                lastRet = -1;
+                expectedModCount = modCount;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+        @Override
+        public void forEachRemaining(Consumer<? super E> action) {
+            Objects.requireNonNull(action);
+            final int size = DIYArrayList.this.size;
+            int i = cursor;
+            if (i < size) {
+                final Object[] array = itemData;
+                if (i >= array.length)
+                    throw new ConcurrentModificationException();
+                for (; i < size && modCount == expectedModCount; i++)
+                    action.accept((E) array[i]);
+                cursor = i;
+                lastRet = i - 1;
+                checkForComodification();
+            }
+        }
+
+    }
+
 
     @Override
     public Object[] toArray() {
-        throw new UnsupportedOperationException();
+        return Arrays.copyOf(itemData, size);
     }
 
     @Override
@@ -84,6 +179,7 @@ public class DIYArrayList<E> implements List<E> {
 
     @Override
     public boolean add(E e) {
+        modCount++;
         if (itemData.length == size) {
             itemData = increase();
         }
@@ -94,47 +190,49 @@ public class DIYArrayList<E> implements List<E> {
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void clear() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public E get(int index) {
+        checkIndex(index, size);
         return itemData(index);
     }
 
     //
     @Override
     public E set(int index, E element) {
+        checkIndex(index, size);
         E oldValue = itemData(index);
         itemData[index] = element;
         return oldValue;
@@ -146,21 +244,28 @@ public class DIYArrayList<E> implements List<E> {
 
     @Override
     public void add(int index, E element) {
+        rangeCheckForAdd(index);
+        modCount++;
         if (index < 0 || index > size)
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         final int s = size;
-        Object[] itemData = this.itemData;
+        Object[] itemData = DIYArrayList.this.itemData;
         if (s == itemData.length) {
             increase();
         }
-        itemData = offset(itemData, index, s - index);
+        itemData = arrayCopyForAdd(itemData, index, s - index);
         itemData[index] = element;
         size = s + 1;
     }
 
-    private static Object[] offset (Object[] array, int index, int length) {
+    private void rangeCheckForAdd(int index) {
+        if (index > size || index < 0)
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+    }
+
+    private static Object[] arrayCopyForAdd (Object[] array, int index, int length) {
         Object temp = array[index];
-        for (int i = index; i <= index + length; i++ ) {
+        for (int i = index; i <= index + length - 1; i++ ) {
             Object temp1 = array[i + 1];
             array[i + 1] = temp;
             temp = temp1;
@@ -168,34 +273,118 @@ public class DIYArrayList<E> implements List<E> {
         return array;
     }
 
+    private static Object[] arrayCopyForRemove (Object[] array, int index, int length) {
+        Object temp = array[index + length - 1];
+        for (int i = index + length - 1; i >= index; i-- ) {
+            Object temp1 = array[i - 1];
+            array[i - 1] = temp;
+            temp = temp1;
+        }
+        return array;
+    }
+
+
     @Override
     public E remove(int index) {
-        return null;
+        checkIndex(index, size);
+        E oldValue = (E) itemData[index];
+        fastRemove(itemData, index);
+        return oldValue;
+    }
+
+    private void fastRemove(Object[] array, int i) {
+        modCount++;
+        final int newSize = size - 1;
+        if (newSize > i) {
+            itemData = arrayCopyForRemove(array, i + 1, newSize - i);
+        }
+        array[newSize] = null;
+        size = newSize;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return new ListItr(0);
     }
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        rangeCheckForAdd(index);
+        return new ListItr(index);
+    }
+
+    private class ListItr extends Itr implements ListIterator<E> {
+        ListItr(int index) {
+            cursor = index;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursor != 0;
+        }
+
+        @Override
+        public E previous() {
+            checkForComodification();
+            int i = cursor - 1;
+            if (i < 0)
+                throw new NoSuchElementException();
+            if (i >= DIYArrayList.this.itemData.length)
+                throw new ConcurrentModificationException();
+            cursor = lastRet = i;
+            return (E) DIYArrayList.this.itemData[lastRet];
+        }
+
+        @Override
+        public int nextIndex() {
+            return cursor;
+        }
+
+        @Override
+        public int previousIndex() {
+            return cursor - 1;
+        }
+
+        @Override
+        public void set(E e) {
+            checkForComodification();
+            if (lastRet < 0)
+                throw new IllegalStateException();
+            try {
+                DIYArrayList.this.set(lastRet, e);
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        @Override
+        public void add(E e) {
+            checkForComodification();
+            try {
+                int i = cursor;
+                DIYArrayList.this.add(i, e);
+                cursor = i + 1;
+                lastRet = -1;
+                expectedModCount = modCount;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
     }
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -205,7 +394,11 @@ public class DIYArrayList<E> implements List<E> {
 
     @Override
     public void sort(Comparator<? super E> c) {
-
+        final int expectedModCount = modCount;
+        Arrays.sort((E[]) itemData, 0, size, c);
+        if (modCount != expectedModCount)
+            throw new ConcurrentModificationException();
+        modCount++;
     }
 
     @Override
