@@ -22,7 +22,7 @@ public class Main {
         diyList.add(40, newCar1);
         Collections.sort(diyList, new Sorter());
         printList(diyList);
-        DIYArrayList<Car> diyCarPark= new DIYArrayList<>(diyList);
+        List<Car> diyCarPark= new DIYArrayList<>(diyList);
         Collections.copy(diyCarPark, diyList);
         System.out.println("size: " + diyCarPark.size());
         printList(diyCarPark);
@@ -91,7 +91,7 @@ public class Main {
         list.add(40, newCar1);
         Collections.sort(list, new Sorter());
         printList(list);
-        ArrayList<Car> carPark= new ArrayList<>(list);
+        List<Car> carPark= new ArrayList<>(list);
         Collections.copy(carPark, list);
         System.out.println("size: " + carPark.size());
         printList(carPark);
