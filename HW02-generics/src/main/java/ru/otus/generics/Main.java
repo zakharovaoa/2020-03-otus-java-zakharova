@@ -9,6 +9,11 @@ public class Main {
 
     public static void main(String... args) {
         //useArrayList();
+
+        if ((3 < 0) || !(3 == 5)) {
+            System.out.println("hello");
+        }
+
         DIYArrayList<Car> diyList= new DIYArrayList<>();
         diyList = fillDIYArrayListData(diyList);
         diyList.set(1, new Bus("MAZ", 2020, 20));

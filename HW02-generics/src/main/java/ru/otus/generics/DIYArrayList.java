@@ -42,9 +42,6 @@ public class DIYArrayList<E> implements List<E> {
         }
     }
 
-
-
-
     public void provideCapacity(int minCapacity) {
         if (itemData.length < minCapacity
             && minCapacity <= INITIAL_CAPACITY
@@ -52,8 +49,6 @@ public class DIYArrayList<E> implements List<E> {
             increase(minCapacity);
         }
     }
-
-
 
     private void checkIndex(int index, int length) {
         if (index >= length || index < 0) {
@@ -63,7 +58,8 @@ public class DIYArrayList<E> implements List<E> {
 
     private Object[] increase(int minCapacity) {
         int oldCapacity = itemData.length;
-        if (itemData != INITIALCAPACITY_EMPTY_ITEMDATA || oldCapacity > 0) {
+        if ((oldCapacity > 0) ||
+                !(itemData == INITIALCAPACITY_EMPTY_ITEMDATA)) {
             int newCapacity = (int) (oldCapacity * 1.5);
             return itemData = Arrays.copyOf(itemData, newCapacity);
         } else {
@@ -139,6 +135,7 @@ public class DIYArrayList<E> implements List<E> {
                 throw new ConcurrentModificationException();
             }
         }
+
         @Override
         public void forEachRemaining(Consumer<? super E> action) {
             Objects.requireNonNull(action);
@@ -155,9 +152,7 @@ public class DIYArrayList<E> implements List<E> {
                 checkForComodification();
             }
         }
-
     }
-
 
     @Override
     public Object[] toArray() {
@@ -173,7 +168,7 @@ public class DIYArrayList<E> implements List<E> {
     public boolean add(E e) {
         modCount++;
         if (itemData.length == size) {
-            itemData = increase();
+            increase();
         }
         itemData[size] = e;
         size += 1;
@@ -221,7 +216,6 @@ public class DIYArrayList<E> implements List<E> {
         return itemData(index);
     }
 
-    //
     @Override
     public E set(int index, E element) {
         checkIndex(index, size);
