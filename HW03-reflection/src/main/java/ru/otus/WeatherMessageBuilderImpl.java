@@ -1,12 +1,8 @@
 package ru.otus;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class WeatherMessageBuilderImpl implements WeatherMessageBuilder{
-
     public static final String TEMPLATE = "Добрый день!\n Завтра будет %s \n Температура %d гр. Цельсия";
     private final HashMap<Integer, String> mapDescription;
 
@@ -23,7 +19,7 @@ public class WeatherMessageBuilderImpl implements WeatherMessageBuilder{
         int degreeCelsius = convertFromFahrenheitToCelsius(degreeFahrenheit);
         String description = getDescription(codeDescription);
         if (description == null || description.isEmpty()) {
-            throw new TemplateNotFoundException();
+            throw new DescriptionNotFoundException();
         }
         return String.format(TEMPLATE, description, degreeCelsius);
     }
@@ -31,14 +27,10 @@ public class WeatherMessageBuilderImpl implements WeatherMessageBuilder{
     @Override
     public String getDescription(Integer codeDescription){
         return mapDescription.get(codeDescription);
-    };
-
-    private static int convertFromFahrenheitToCelsius(int degreeFahrenheit) {
-        return (int) (5/9.0 * (degreeFahrenheit - 32));
     }
 
-
-
-
-
+    @Override
+    public int convertFromFahrenheitToCelsius(int degreeFahrenheit) {
+        return (int) (5/9.0 * (degreeFahrenheit - 32));
+    }
 }
