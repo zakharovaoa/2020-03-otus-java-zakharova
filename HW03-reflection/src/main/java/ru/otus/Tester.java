@@ -3,12 +3,12 @@ package ru.otus;
 import ru.otus.annotations.After;
 import ru.otus.annotations.Before;
 import ru.otus.annotations.Test;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Tester {
 
@@ -21,7 +21,7 @@ public class Tester {
         Method[] methodsPublic = clazz.getMethods();
         Method methodBefore = null;
         Method methodAfter = null;
-        ArrayList<Method> methodsTest = new ArrayList<>();
+        List<Method> methodsTest = new ArrayList<>();
         for (Method m : methodsPublic) {
             if (m.isAnnotationPresent(Before.class)) {
                 methodBefore = m;
