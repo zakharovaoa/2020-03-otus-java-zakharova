@@ -34,7 +34,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.otus.Main</mainClass>
+                            <mainClass>ru.otus.gc.bench.GcCompare</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
