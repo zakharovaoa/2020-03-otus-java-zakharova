@@ -23,19 +23,19 @@ class Ioc {
 
         DemoInvocationHandler(TestLoggingInterface myClass) {
             this.myClass = myClass;
-            this.listMethods = new ArrayList<Method>();
+            this.listMethods = new ArrayList<String>();
             Class<TestLoggingInterface> clazz = TestLoggingInterface.class;
             Method[] methodsPublic = clazz.getMethods();
             for (Method m : methodsPublic) {
                 if (m.isAnnotationPresent(Log.class)) {
-                    this.listMethods.add(m);
+                    this.listMethods.add(m.getName());
                 }
             }
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (listMethods.indexOf(method) >= 0) {
+            if (this.listMethods.indexOf(method.getName()) >= 0) {
                 String str = "";
                 for (int i = 0; i < args.length; i++ ) {
                     if (i > 0) {
