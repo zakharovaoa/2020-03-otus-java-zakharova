@@ -35,7 +35,8 @@ class Ioc {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (this.listMethods.indexOf(method.getName()) >= 0) {
+            String name = method.getName();
+            if (this.listMethods.indexOf(name) >= 0) {
                 String str = "";
                 for (int i = 0; i < args.length; i++ ) {
                     if (i > 0) {
@@ -43,7 +44,7 @@ class Ioc {
                     }
                     str += args[i];
                 }
-                System.out.println("executed method: " + method.getName() + ", params: " + str);
+                System.out.println("executed method: " + name + ", params: " + str);
             }
             return method.invoke(myClass, args);
         }
