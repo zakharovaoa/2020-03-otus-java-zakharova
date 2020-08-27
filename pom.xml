@@ -26,6 +26,7 @@
         <module>HW03-reflection</module>
         <module>HW04-GC</module>
         <module>HW05-byteCodes</module>
+        <module>HW06-solid</module>
     </modules>
 
     <properties>
