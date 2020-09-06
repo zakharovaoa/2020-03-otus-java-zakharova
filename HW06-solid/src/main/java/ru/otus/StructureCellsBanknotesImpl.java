@@ -7,13 +7,12 @@ public class StructureCellsBanknotesImpl implements StructureCellsBanknotes{
     private Map<Integer, Integer> mapStructureCells = new HashMap<>();
 
     public StructureCellsBanknotesImpl() {
-        this.mapStructureCells.put(50, 0);
-        this.mapStructureCells.put(100, 5);
-        this.mapStructureCells.put(200, 0);
-        this.mapStructureCells.put(500, 0);
-        this.mapStructureCells.put(1000, 0);
-        this.mapStructureCells.put(2000, 0);
-        this.mapStructureCells.put(5000, 0);
+        for (FaceValueBanknote f : FaceValueBanknote.values()) {
+            this.mapStructureCells.put(
+                    f.getFaceValueBanknote(),
+                    0
+            );
+        }
     }
 
     @Override

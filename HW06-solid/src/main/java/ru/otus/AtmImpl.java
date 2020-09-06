@@ -4,15 +4,15 @@ import java.util.*;
 
 public class AtmImpl implements Atm {
 
-    private final CellsBanknotes cellsBanknotes;
+    private final DeviceCellsBanknotes deviceCellsBanknotes;
 
     public AtmImpl(Integer initialCountBanknotes) {
-        cellsBanknotes = new CellsBanknotesImpl(initialCountBanknotes);
+        deviceCellsBanknotes = new DeviceCellsBanknotesImpl(initialCountBanknotes);
     }
 
     @Override
     public void receiveSum(Integer faceValueBanknote, Integer countBanknotes) {
-        this.cellsBanknotes.addBanknotes(faceValueBanknote, countBanknotes);
+        this.deviceCellsBanknotes.addBanknotes(faceValueBanknote, countBanknotes);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class AtmImpl implements Atm {
             count = remainder / key;
             if (count != 0) {
                 remainder = remainder - key * count;
-                this.cellsBanknotes.reduceBanknotes(key, count);
+                this.deviceCellsBanknotes.reduceBanknotes(key, count);
                 mapCells.replace(key, count);
             }
         }
@@ -36,7 +36,7 @@ public class AtmImpl implements Atm {
 
     @Override
     public Integer getBalance() {
-        return this.cellsBanknotes.getBalance();
+        return this.deviceCellsBanknotes.getBalance();
     }
 
 }

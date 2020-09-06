@@ -1,12 +1,22 @@
 package ru.otus;
 
-public interface CellsBanknotes {
+import java.util.HashMap;
+import java.util.Map;
 
-    void addBanknotes(Integer faceValueBanknote, Integer countBanknotes);
+public class CellsBanknotes {
+    private Map<Integer, Integer> mapCells;
+    private final StructureCellsBanknotes structureCellsBanknotes = new StructureCellsBanknotesImpl();
 
-    void reduceBanknotes(Integer faceValueBanknote, Integer countBanknotes);
+    public CellsBanknotes () {
+        this.mapCells = new HashMap<>(structureCellsBanknotes.getMapStructureCells());
+    }
 
-    Integer getCountBanknotes(Integer faceValueBanknote);
+    public Map<Integer, Integer> getMap() {
+        return this.mapCells;
+    }
 
-    Integer getBalance();
+    public void setMap(Map<Integer, Integer> map) {
+        this.mapCells = map;
+    }
+
 }
