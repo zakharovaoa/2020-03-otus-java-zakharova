@@ -23,12 +23,7 @@ public class StructureCellsBanknotesImpl implements StructureCellsBanknotes{
 
     @Override
     public Set getSortedSetKeys() {
-        Set<Integer> sortedSet = new TreeSet<Integer>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o2 - o1;
-            }
-        });
+        Set<Integer> sortedSet = new TreeSet<Integer>((o1, o2) -> o2.compareTo(o1));
         sortedSet.addAll(this.mapStructureCells.keySet());
         return sortedSet;
     }
