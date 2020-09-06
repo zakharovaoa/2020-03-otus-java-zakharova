@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CellsBanknotes {
+    
     private Map<Integer, Integer> mapCells;
     private final StructureCellsBanknotes structureCellsBanknotes = new StructureCellsBanknotesImpl();
 
@@ -13,10 +14,6 @@ public class CellsBanknotes {
 
     public Map<Integer, Integer> getMap() {
         return this.mapCells;
-    }
-
-    public void setMap(Map<Integer, Integer> map) {
-        this.mapCells = map;
     }
 
 }
