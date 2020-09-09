@@ -11,21 +11,22 @@ public class AtmImpl implements Atm {
     }
 
     @Override
-    public void receiveSum(Integer faceValueBanknote, Integer countBanknotes) {
-        this.deviceCellsBanknotes.addBanknotes(faceValueBanknote, countBanknotes);
+    public void receiveSum(CellBanknotes cellBanknotes, Integer countBanknotes) {
+        this.deviceCellsBanknotes.addBanknotes(cellBanknotes, countBanknotes);
     }
 
     @Override
     public Map giveSum(Integer sum) {
         StructureCellsBanknotes structureCellsBanknotes = new StructureCellsBanknotesImpl();
-        HashMap<Integer, Integer> mapCells = new HashMap<>(structureCellsBanknotes.getMapStructureCells());
+        HashMap<CellBanknotes, Integer> mapCells = new HashMap<>(structureCellsBanknotes.getMapStructureCells());
         int count;
         int remainder = sum;
-        Set<Integer> setKeys = structureCellsBanknotes.getSortedSetKeys();
-        for (Integer key: setKeys) {
-            count = remainder / key;
+        Set<CellBanknotes> setKeys = structureCellsBanknotes.getSortedSetKeys();
+        for (CellBanknotes key: setKeys) {
+            int numberFaceValueBanknote = key.getNumberFaceValueBanknote();
+            count = remainder / numberFaceValueBanknote;
             if (count != 0) {
-                remainder = remainder - key * count;
+                remainder = remainder - numberFaceValueBanknote * count;
                 this.deviceCellsBanknotes.reduceBanknotes(key, count);
                 mapCells.replace(key, count);
             }

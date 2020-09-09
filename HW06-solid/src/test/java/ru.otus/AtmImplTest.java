@@ -9,11 +9,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.otus.FaceValueBanknote.*;
 
 class AtmImplTest {
 
     private Atm atm;
-    public static final Integer FACE_VALUE_BANKNOTE = 500;
+    public static final CellBanknotes CELL_BANKNOTES = new CellBanknotes(BANKNOTE_500);
     public static final Integer COUNT_BANKNOTES = 3;
     public static final Integer SUM = 90000;
     private static final Integer INITIAL_COUNT_BANKNOTES = 10;
@@ -29,7 +30,7 @@ class AtmImplTest {
     @DisplayName("должен возвращать корректный баланс когда принял банкноты")
     @Test
     void shouldReturnCorrectBalanceWhenReceiveSum() {
-        atm.receiveSum(FACE_VALUE_BANKNOTE, COUNT_BANKNOTES);
+        atm.receiveSum(CELL_BANKNOTES, COUNT_BANKNOTES);
         Integer result = atm.getBalance();
         Assert.assertEquals(result, SUM);
     }
@@ -44,7 +45,7 @@ class AtmImplTest {
     @DisplayName("должен выдавать сумму минимальным количеством банкнот")
     @Test
     void shouldGiveSumMinCountBanknotes() {
-        Map<Integer, Integer> map = atm.giveSum(MIN_SINGLE_SUM);
+        Map<CellBanknotes, Integer> map = atm.giveSum(MIN_SINGLE_SUM);
         Collection<Integer> list = map.values();
         for (Integer value : list) {
             Assert.assertEquals(value, COUNT_MIN);

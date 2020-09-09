@@ -9,13 +9,13 @@ enum FaceValueBanknote {
     BANKNOTE_2000 (2000),
     BANKNOTE_5000 (5000);
 
-    private final Integer faceValueBanknote;
+    private final Integer numberFaceValueBanknote;
 
-    FaceValueBanknote (Integer faceValueBanknote) {
-        this.faceValueBanknote = faceValueBanknote;
+    FaceValueBanknote (Integer numberFaceValueBanknote) {
+        this.numberFaceValueBanknote = numberFaceValueBanknote;
     }
 
-    public int getFaceValueBanknote() {
-        return this.faceValueBanknote;
+    public int getNumberFaceValueBanknote() {
+        return this.numberFaceValueBanknote;
     }
 }

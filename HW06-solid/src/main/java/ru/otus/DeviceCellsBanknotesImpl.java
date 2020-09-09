@@ -5,46 +5,44 @@ import java.util.Map;
 
 public class DeviceCellsBanknotesImpl implements DeviceCellsBanknotes{
 
-    private final CellsBanknotes cellsBanknotes = new CellsBanknotes();
+    private Map<CellBanknotes, Integer> mapCells;
+    private final StructureCellsBanknotes structureCellsBanknotes = new StructureCellsBanknotesImpl();
 
     public DeviceCellsBanknotesImpl(Integer initialCountBanknotes) {
-
-        for (Map.Entry entry: cellsBanknotes.getMap().entrySet()) {
+        this.mapCells = new HashMap<>(structureCellsBanknotes.getMapStructureCells());
+        for (Map.Entry entry: this.mapCells.entrySet()) {
             entry.setValue(initialCountBanknotes);
         }
     }
     
     @Override
-    public void addBanknotes(Integer faceValueBanknote, Integer countBanknotes) {
-        if (!(cellsBanknotes.getMap().containsKey(faceValueBanknote))
-                || (countBanknotes <= 0)) {
-            throw new CellsBanknotesError();
-        }
-        Integer currentCount = getCountBanknotes(faceValueBanknote);
-        cellsBanknotes.getMap().replace(faceValueBanknote, currentCount + countBanknotes);
+    public void addBanknotes(CellBanknotes cellBanknotes, Integer countBanknotes) {
+        if (countBanknotes <= 0) throw new CellsBanknotesError();
+        Integer currentCount = getCountBanknotes(cellBanknotes);
+        this.mapCells.replace(cellBanknotes, currentCount + countBanknotes);
     }
 
     @Override
-    public void reduceBanknotes(Integer faceValueBanknote, Integer countBanknotes) {
-        Integer currentCount = getCountBanknotes(faceValueBanknote);
-        if (!(cellsBanknotes.getMap().containsKey(faceValueBanknote))
-                || (countBanknotes <= 0)
+    public void reduceBanknotes(CellBanknotes cellBanknotes, Integer countBanknotes) {
+        Integer currentCount = getCountBanknotes(cellBanknotes);
+        if ((countBanknotes <= 0)
                 || (currentCount - countBanknotes) < 0) {
             throw new CellsBanknotesError();
         }
-        cellsBanknotes.getMap().replace(faceValueBanknote, currentCount - countBanknotes);
+        this.mapCells.replace(cellBanknotes, currentCount - countBanknotes);
     }
 
     @Override
-    public Integer getCountBanknotes(Integer faceValueBanknote) {
-        return cellsBanknotes.getMap().get(faceValueBanknote);
+    public Integer getCountBanknotes(CellBanknotes cellBanknotes) {
+        return this.mapCells.get(cellBanknotes);
     }
 
     @Override
     public Integer getBalance() {
         Integer sum = 0;
-        for (Map.Entry entry: cellsBanknotes.getMap().entrySet()) {
-            sum += (Integer) (entry.getValue()) * (Integer) entry.getKey();
+        for (Map.Entry entry: this.mapCells.entrySet()) {
+            CellBanknotes cellBanknotes = (CellBanknotes) entry.getKey();
+            sum += (Integer) (entry.getValue()) * (Integer) cellBanknotes.getNumberFaceValueBanknote();
         }
         return sum;
     }

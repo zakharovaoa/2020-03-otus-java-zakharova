@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 class StructureCellsBanknotesImplTest {
-    private Map<Integer, Integer> mapStructureCells;
+    private Map<CellBanknotes, Integer> mapStructureCells;
 
     private StructureCellsBanknotes structureCellsBanknotes;
 
@@ -21,11 +21,12 @@ class StructureCellsBanknotesImplTest {
     @DisplayName("должен возвращать Set с сортировкой по убыванию")
     @Test
     void shouldReturnDescSortedSet() {
-        Set<Integer> set = structureCellsBanknotes.getSortedSetKeys();
+        Set<CellBanknotes> set = structureCellsBanknotes.getSortedSetKeys();
         Integer prev = Integer.MAX_VALUE;
-        for (Integer key : set) {
-            Assert.assertFalse(key > prev);
-            prev = key;
+        for (CellBanknotes key : set) {
+            Integer numberFaceValueBanknote = key.getNumberFaceValueBanknote();
+            Assert.assertFalse(numberFaceValueBanknote > prev);
+            prev = numberFaceValueBanknote;
         }
     }
 }

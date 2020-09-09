@@ -4,12 +4,12 @@ import java.util.*;
 
 public class StructureCellsBanknotesImpl implements StructureCellsBanknotes{
 
-    private Map<Integer, Integer> mapStructureCells = new HashMap<>();
+    private Map<CellBanknotes, Integer> mapStructureCells = new HashMap<>();
 
     public StructureCellsBanknotesImpl() {
         for (FaceValueBanknote f : FaceValueBanknote.values()) {
             this.mapStructureCells.put(
-                    f.getFaceValueBanknote(),
+                    new CellBanknotes(f),
                     0
             );
         }
@@ -22,7 +22,7 @@ public class StructureCellsBanknotesImpl implements StructureCellsBanknotes{
 
     @Override
     public Set getSortedSetKeys() {
-        Set<Integer> sortedSet = new TreeSet<Integer>((o1, o2) -> o2.compareTo(o1));
+        Set<CellBanknotes> sortedSet = new TreeSet<CellBanknotes>((o1, o2) -> o2.compareTo(o1));
         sortedSet.addAll(this.mapStructureCells.keySet());
         return sortedSet;
     }

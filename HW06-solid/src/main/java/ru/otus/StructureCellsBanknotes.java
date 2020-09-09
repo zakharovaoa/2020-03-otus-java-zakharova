@@ -5,7 +5,7 @@ import java.util.Set;
 
 public interface StructureCellsBanknotes {
 
-        Map getMapStructureCells();
+    Map getMapStructureCells();
 
-        Set getSortedSetKeys();
+    Set getSortedSetKeys();
 }
