@@ -8,4 +8,7 @@ public interface StructureCellsBanknotes {
     Map getMapStructureCells();
 
     Set getSortedSetKeys();
+
+    CellBanknotes getCellBanknotes(FaceValueBanknote faceValueBanknote);
+
 }

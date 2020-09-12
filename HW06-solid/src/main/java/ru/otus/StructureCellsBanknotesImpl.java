@@ -9,7 +9,7 @@ public class StructureCellsBanknotesImpl implements StructureCellsBanknotes{
     public StructureCellsBanknotesImpl() {
         for (FaceValueBanknote f : FaceValueBanknote.values()) {
             this.mapStructureCells.put(
-                    new CellBanknotes(f),
+                    new CellBanknotesImpl(f),
                     0
             );
         }
@@ -26,4 +26,15 @@ public class StructureCellsBanknotesImpl implements StructureCellsBanknotes{
         sortedSet.addAll(this.mapStructureCells.keySet());
         return sortedSet;
     }
+
+    @Override
+    public CellBanknotes getCellBanknotes(FaceValueBanknote faceValueBanknote) {
+        for (CellBanknotes key : this.mapStructureCells.keySet()) {
+            if (key.getFaceValueBanknote().equals(faceValueBanknote)) {
+                return key;
+            }
+        }
+        throw new CellsBanknotesError();
+    }
+
 }

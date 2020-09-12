@@ -14,7 +14,7 @@ import static ru.otus.FaceValueBanknote.*;
 class AtmImplTest {
 
     private Atm atm;
-    public static final CellBanknotes CELL_BANKNOTES = new CellBanknotes(BANKNOTE_500);
+    public static final FaceValueBanknote FACE_VALUE_BANKNOTE = BANKNOTE_500;
     public static final Integer COUNT_BANKNOTES = 3;
     public static final Integer SUM = 90000;
     private static final Integer INITIAL_COUNT_BANKNOTES = 10;
@@ -30,7 +30,7 @@ class AtmImplTest {
     @DisplayName("должен возвращать корректный баланс когда принял банкноты")
     @Test
     void shouldReturnCorrectBalanceWhenReceiveSum() {
-        atm.receiveSum(CELL_BANKNOTES, COUNT_BANKNOTES);
+        atm.receiveSum(FACE_VALUE_BANKNOTE, COUNT_BANKNOTES);
         Integer result = atm.getBalance();
         Assert.assertEquals(result, SUM);
     }

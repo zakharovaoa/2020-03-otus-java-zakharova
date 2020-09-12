@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface Atm {
 
-    void receiveSum(CellBanknotes cellBanknotes, Integer countBanknotes);
+    void receiveSum(FaceValueBanknote faceValueBanknote, Integer countBanknotes);
 
     Map giveSum(Integer sum);
 

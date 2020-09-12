@@ -11,15 +11,15 @@ public class AtmImpl implements Atm {
     }
 
     @Override
-    public void receiveSum(CellBanknotes cellBanknotes, Integer countBanknotes) {
-        this.deviceCellsBanknotes.addBanknotes(cellBanknotes, countBanknotes);
+    public void receiveSum(FaceValueBanknote faceValueBanknote, Integer countBanknotes) {
+        this.deviceCellsBanknotes.addBanknotes(faceValueBanknote, countBanknotes);
     }
 
     @Override
     public Map giveSum(Integer sum) {
         StructureCellsBanknotes structureCellsBanknotes = new StructureCellsBanknotesImpl();
-        HashMap<CellBanknotes, Integer> mapCells = new HashMap<>(structureCellsBanknotes.getMapStructureCells());
-        int count;
+        HashMap<FaceValueBanknote, Integer> mapCells = new HashMap<>();
+        Integer count;
         int remainder = sum;
         Set<CellBanknotes> setKeys = structureCellsBanknotes.getSortedSetKeys();
         for (CellBanknotes key: setKeys) {
@@ -27,8 +27,8 @@ public class AtmImpl implements Atm {
             count = remainder / numberFaceValueBanknote;
             if (count != 0) {
                 remainder = remainder - numberFaceValueBanknote * count;
-                this.deviceCellsBanknotes.reduceBanknotes(key, count);
-                mapCells.replace(key, count);
+                this.deviceCellsBanknotes.reduceBanknotes(key.getFaceValueBanknote(), count);
+                mapCells.put(key.getFaceValueBanknote(), count);
             }
         }
         if (remainder > 0) throw new CellsBanknotesError();

@@ -2,11 +2,11 @@ package ru.otus;
 
 public interface DeviceCellsBanknotes {
 
-    void addBanknotes(CellBanknotes cellBanknotes, Integer countBanknotes);
+    void addBanknotes(FaceValueBanknote faceValueBanknote, Integer countBanknotes);
 
-    void reduceBanknotes(CellBanknotes cellBanknotes, Integer countBanknotes);
+    void reduceBanknotes(FaceValueBanknote faceValueBanknote, Integer countBanknotes);
 
-    Integer getCountBanknotes(CellBanknotes cellBanknotes);
+    Integer getCountBanknotes(FaceValueBanknote faceValueBanknote);
 
     Integer getBalance();
 }

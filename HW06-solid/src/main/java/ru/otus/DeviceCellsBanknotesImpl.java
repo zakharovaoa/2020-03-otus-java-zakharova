@@ -16,25 +16,25 @@ public class DeviceCellsBanknotesImpl implements DeviceCellsBanknotes{
     }
     
     @Override
-    public void addBanknotes(CellBanknotes cellBanknotes, Integer countBanknotes) {
+    public void addBanknotes(FaceValueBanknote faceValueBanknote, Integer countBanknotes) {
         if (countBanknotes <= 0) throw new CellsBanknotesError();
-        Integer currentCount = getCountBanknotes(cellBanknotes);
-        this.mapCells.replace(cellBanknotes, currentCount + countBanknotes);
+        Integer currentCount = getCountBanknotes(faceValueBanknote);
+        this.mapCells.replace(structureCellsBanknotes.getCellBanknotes(faceValueBanknote), currentCount + countBanknotes);
     }
 
     @Override
-    public void reduceBanknotes(CellBanknotes cellBanknotes, Integer countBanknotes) {
-        Integer currentCount = getCountBanknotes(cellBanknotes);
+    public void reduceBanknotes(FaceValueBanknote faceValueBanknote, Integer countBanknotes) {
+        Integer currentCount = getCountBanknotes(faceValueBanknote);
         if ((countBanknotes <= 0)
                 || (currentCount - countBanknotes) < 0) {
             throw new CellsBanknotesError();
         }
-        this.mapCells.replace(cellBanknotes, currentCount - countBanknotes);
+        this.mapCells.replace(structureCellsBanknotes.getCellBanknotes(faceValueBanknote), currentCount - countBanknotes);
     }
 
     @Override
-    public Integer getCountBanknotes(CellBanknotes cellBanknotes) {
-        return this.mapCells.get(cellBanknotes);
+    public Integer getCountBanknotes(FaceValueBanknote faceValueBanknote) {
+        return this.mapCells.get(structureCellsBanknotes.getCellBanknotes(faceValueBanknote));
     }
 
     @Override

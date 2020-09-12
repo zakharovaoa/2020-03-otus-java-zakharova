@@ -1,36 +1,14 @@
 package ru.otus;
 
-import java.util.Objects;
+public interface CellBanknotes {
 
-public class CellBanknotes {
+    Integer getNumberFaceValueBanknote();
 
-    private FaceValueBanknote faceValueBanknote;
+    FaceValueBanknote getFaceValueBanknote();
 
-    private final Integer numberFaceValueBanknote;
+    int compareTo(CellBanknotes o1);
 
-    public CellBanknotes (FaceValueBanknote faceValueBanknote) {
-        this.numberFaceValueBanknote = faceValueBanknote.getNumberFaceValueBanknote();
-    }
+    boolean equals(Object o);
 
-    public Integer getNumberFaceValueBanknote() {
-        return this.numberFaceValueBanknote;
-    }
-
-    public int compareTo(CellBanknotes o1) {
-        return this.numberFaceValueBanknote - o1.numberFaceValueBanknote;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CellBanknotes that = (CellBanknotes) o;
-        return faceValueBanknote == that.faceValueBanknote &&
-                numberFaceValueBanknote.equals(that.numberFaceValueBanknote);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(faceValueBanknote, numberFaceValueBanknote);
-    }
+    int hashCode();
 }
