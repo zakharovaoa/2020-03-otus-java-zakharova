@@ -12,7 +12,7 @@
     <artifactId>OtusJavaHW</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <description>Code hw01-maven</description>
+    <description>Code hw</description>
 
     <developers>
         <developer>
@@ -26,6 +26,7 @@
         <module>HW03-reflection</module>
         <module>HW04-GC</module>
         <module>HW05-byteCodes</module>
+        <module>HW06-solid</module>
     </modules>
 
     <properties>
@@ -55,6 +56,52 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
+
+
+            <!--region Test dependencies - JUnit Jupiter, AssertJ, Hamcrest, Mockito -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!--endregion-->
+
         </dependencies>
     </dependencyManagement>
 
