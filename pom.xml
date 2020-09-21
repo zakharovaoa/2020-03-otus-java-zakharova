@@ -27,6 +27,7 @@
         <module>HW04-GC</module>
         <module>HW05-byteCodes</module>
         <module>HW06-solid</module>
+        <module>HW09-jdbc</module>
     </modules>
 
     <properties>
