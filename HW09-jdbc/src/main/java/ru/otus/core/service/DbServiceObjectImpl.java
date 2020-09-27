@@ -2,26 +2,24 @@ package ru.otus.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.core.dao.UserDao;
-import ru.otus.core.model.User;
-
+import ru.otus.core.dao.ObjectDao;
 import java.util.Optional;
 
-public class DbServiceUserImpl implements DBServiceUser {
-    private static final Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
+public class DbServiceObjectImpl<T> implements DBServiceObject<T> {
+    private static final Logger logger = LoggerFactory.getLogger(DbServiceObjectImpl.class);
 
-    private final UserDao userDao;
+    private final ObjectDao<T> objectDao;
 
-    public DbServiceUserImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public DbServiceObjectImpl(ObjectDao<T> objectDao) {
+        this.objectDao = objectDao;
     }
 
     @Override
-    public long saveUser(User user) {
-        try (var sessionManager = userDao.getSessionManager()) {
+    public long saveObject(T object) {
+        try (var sessionManager = objectDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                var userId = userDao.insertUser(user);
+                var userId = objectDao.insertObject(object);
                 sessionManager.commitSession();
 
                 logger.info("created user: {}", userId);
@@ -35,11 +33,11 @@ public class DbServiceUserImpl implements DBServiceUser {
     }
 
     @Override
-    public Optional<User> getUser(long id) {
-        try (var sessionManager = userDao.getSessionManager()) {
+    public Optional<T> getObject(long id) {
+        try (var sessionManager = objectDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                Optional<User> userOptional = userDao.findById(id);
+                Optional<T> userOptional = objectDao.findById(id);
 
                 logger.info("user: {}", userOptional.orElse(null));
                 return userOptional;
@@ -50,4 +48,6 @@ public class DbServiceUserImpl implements DBServiceUser {
             return Optional.empty();
         }
     }
+
+
 }

@@ -3,8 +3,7 @@ package ru.otus.jdbc.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.core.dao.UserDao;
-import ru.otus.core.dao.UserDaoException;
+
 import ru.otus.core.model.User;
 import ru.otus.core.sessionmanager.SessionManager;
 import ru.otus.jdbc.DbExecutorImpl;
@@ -15,7 +14,8 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Optional;
 
-public class UserDaoJdbc implements UserDao {
+public class UserDaoJdbc { // implements UserDao
+/*
     private static final Logger logger = LoggerFactory.getLogger(UserDaoJdbc.class);
 
     private final SessionManagerJdbc sessionManager;
@@ -28,6 +28,7 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
+
         try {
             return dbExecutor.executeSelect(getConnection(), "select id, name, age from user where id  = ?",
                     id, rs -> {
@@ -43,11 +44,13 @@ public class UserDaoJdbc implements UserDao {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
+
         return Optional.empty();
     }
 
     @Override
     public long insertUser(User user) {
+    /*
         try {
             return dbExecutor.executeInsert(getConnection(), "insert into user(name, age) values (?, ?)",
                     user.getName(), user.getAge());
@@ -56,6 +59,9 @@ public class UserDaoJdbc implements UserDao {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
         }
+
+
+        return 1;
     }
 
     @Override
@@ -66,4 +72,6 @@ public class UserDaoJdbc implements UserDao {
     private Connection getConnection() {
         return sessionManager.getCurrentSession().getConnection();
     }
+*/
+
 }

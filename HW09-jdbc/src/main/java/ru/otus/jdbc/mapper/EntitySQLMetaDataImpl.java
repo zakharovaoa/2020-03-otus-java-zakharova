@@ -7,10 +7,26 @@ import java.util.List;
 
 public class EntitySQLMetaDataImpl implements EntitySQLMetaData{
 
-    public EntityClassMetaData entityClassMetaData;
+    private EntityClassMetaData entityClassMetaData;
+    private boolean isInit;
 
-    public EntitySQLMetaDataImpl(T objectData) {
-        this.entityClassMetaData = new EntityClassMetaDataImpl<T>(T objectData));
+    public EntitySQLMetaDataImpl(Class<?> clazz, EntityClassMetaData entityClassMetaData) {
+        /*if (!entityClassMetaData.isInit()) {
+            //heavyObject.init("bigVal");
+            this.entityClassMetaData = new EntityClassMetaDataImpl(clazz);
+        }*/
+        this.entityClassMetaData = entityClassMetaData;
+
+    }
+
+    @Override
+    public void init() {
+        isInit = true;
+    }
+
+    @Override
+    public boolean isInit() {
+        return isInit;
     }
 
     @Override
@@ -29,7 +45,7 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData{
         for (Field field : list) {
             str.append(field.getName() + ", ");
         }
-        str.substring(1, str.length() - 2);
+        str.setLength(str.length() - 2);// = str.substring(1, str.length() - 2);
         str.append(" from ");
         str.append(entityClassMetaData.getName());
         str.append(" where" );
@@ -53,8 +69,8 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData{
             str.append(field.getName() + ", ");
             strParam.append("?, ");
         }
-        str.substring(1, str.length() - 2);
-        strParam.substring(1, strParam.length() - 2);
+        str.setLength(str.length() - 2); //str.substring(1, str.length() - 2);
+        strParam.setLength(strParam.length() - 2); //strParam.substring(1, strParam.length() - 2);
         str.append(") values (");
         str.append(strParam);
         str.append(")");

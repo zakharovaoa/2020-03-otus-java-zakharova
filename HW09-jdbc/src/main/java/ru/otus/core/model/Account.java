@@ -8,14 +8,12 @@ import ru.otus.Id;
  */
 public class Account {
     @Id
-    private final long no;
-    private final String type;
-    private final int rest;
+    private long no;
+    private String type;
+    private int rest;
 
-    public Account(long no, String type, int rest) {
-        this.no = no;
-        this.type = type;
-        this.rest = rest;
+    public Account() {
+
     }
 
     public long getNo() {
@@ -32,7 +30,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Account{" +
                 "No=" + no +
                 ", Type='" + type + '\'' +
                 " Rest=" + rest +
