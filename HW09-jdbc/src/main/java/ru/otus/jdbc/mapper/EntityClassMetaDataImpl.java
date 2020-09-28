@@ -1,6 +1,7 @@
 package ru.otus.jdbc.mapper;
 
 import ru.otus.Id;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -8,20 +9,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
-    private Class<?> clazz;
-    private List<Field> listAll;
-    private List<Field> listWithoutId;
-    private String name;
-    private Constructor constructor;
-    private Field idField;
-    private boolean isInit;
-
+    private final Class<?> clazz;
+    private final List<Field> listAll;
+    private final List<Field> listWithoutId;
+    private final String name;
+    private final Constructor constructor;
+    private final Field idField;
+    private final boolean isInit;
 
     public EntityClassMetaDataImpl(Class<?> clazz) {
-        init(clazz);
-    }
-
-    public void init(Class<?> clazz) {
         isInit = true;
         this.clazz = clazz;
         listAll = getInitAllFields();

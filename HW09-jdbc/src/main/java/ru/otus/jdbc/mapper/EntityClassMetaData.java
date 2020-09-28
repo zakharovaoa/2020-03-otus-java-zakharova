@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface EntityClassMetaData<T> {
 
-    void init(Class<?> clazz);
-
     boolean isInit();
 
     String getName();

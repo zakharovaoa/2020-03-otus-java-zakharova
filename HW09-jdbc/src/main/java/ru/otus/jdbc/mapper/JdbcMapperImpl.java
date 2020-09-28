@@ -2,19 +2,13 @@ package ru.otus.jdbc.mapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import ru.otus.core.dao.UserDaoException;
 import ru.otus.core.dao.ObjectDaoException;
-import ru.otus.core.model.User;
 import ru.otus.core.sessionmanager.SessionManager;
 import ru.otus.jdbc.DbExecutorImpl;
-import ru.otus.jdbc.dao.ObjectDaoJdbcMapper;
-import ru.otus.jdbc.dao.UserDaoJdbc;
 import ru.otus.jdbc.sessionmanager.SessionManagerJdbc;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +56,6 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
         try {
                 for (Field field : list) {
                     field.setAccessible(true);
-                    System.out.println(field.get(objectData));
                     listValue.add(field.get(objectData));
                 }
         } catch (IllegalAccessException e) {
@@ -74,38 +67,69 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
 
     @Override
     public void update(T objectData) {
-
-    }
-
-    @Override
-    public void insertOrUpdate(T objectData) {
-
+        if (entityClassMetaData == null || !entityClassMetaData.isInit()) {
+            entityClassMetaData = new EntityClassMetaDataImpl(objectData.getClass());
+        }
+        if (entitySQLMetaData == null || !entitySQLMetaData.isInit()) {
+            entitySQLMetaData = new EntitySQLMetaDataImpl(objectData.getClass(), entityClassMetaData);
+        }
+        List<Field> list = new ArrayList<>(entityClassMetaData.getFieldsWithoutId());
+        list.add(entityClassMetaData.getIdField());
+        List<Object> listValue = getListValue(list, objectData);
+        try {
+             dbExecutor.executeUpdate(getConnection(), entitySQLMetaData.getUpdateSql(),
+                     listValue);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new ObjectDaoException(e);
+        }
     }
 
     @Override
     public T findById(long id, Class<T> clazz) {
-        /*List<Field> list = getAllFields();
-            try {
-                return dbExecutor.executeSelect(getConnection(), getSelectByIdSql,
-                        id, rs -> {
-                            try {
-                                if (rs.next()) {
-
-                                    return new User(rs.getLong("id"), rs.getString("name"), rs.getInt("age"));
-                                    Constructor<T> constructor = getConstructor;
-                                    T object = constructor.newInstance(rs.getLong(list.get(0).getName()), rs.getString(list.get(1).getName()), rs.getInt(list.get(2).getName()));
-
-                                }
-                            } catch (SQLException e) {
-                                logger.error(e.getMessage(), e);
+        if (entityClassMetaData == null || !entityClassMetaData.isInit()) {
+            entityClassMetaData = new EntityClassMetaDataImpl(clazz);
+        }
+        if (entitySQLMetaData == null || !entitySQLMetaData.isInit()) {
+            entitySQLMetaData = new EntitySQLMetaDataImpl(clazz, entityClassMetaData);
+        }
+        try {
+            Optional<T> optionalObject = dbExecutor.executeSelect(getConnection(), entitySQLMetaData.getSelectByIdSql(),
+                id, rs -> {
+                try {
+                    if (rs.next()) {
+                        Constructor<T> constructor = entityClassMetaData.getConstructor();
+                        T object = constructor.newInstance();
+                        List<Field> listFieldsWithoutId = entityClassMetaData.getFieldsWithoutId();
+                        for (Field field : listFieldsWithoutId) {
+                            var columnLabel = field.getName();
+                            var fieldType = field.getType();
+                            if (String.class.equals(fieldType)) {
+                                field.setAccessible(true);
+                                field.set(object, rs.getString(columnLabel));
+                            } else if (int.class.equals(fieldType) || Integer.class.equals(fieldType)) {
+                                field.setAccessible(true);
+                                field.set(object, rs.getInt(columnLabel));
+                            } else if (long.class.equals(fieldType) || Long.class.equals(fieldType)) {
+                                field.setAccessible(true);
+                                field.set(object, rs.getLong(columnLabel));
                             }
-                            return null;
-                        });
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            }*/
-            return null;
-
+                        }
+                        var field = entityClassMetaData.getIdField();
+                        field.setAccessible(true);
+                        field.set(object, id);
+                        return object;
+                    }
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                }
+                return null;
+                });
+            return optionalObject.isPresent() ? optionalObject.get() : null;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     public SessionManager getSessionManager() {
@@ -116,4 +140,8 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
         return sessionManager.getCurrentSession().getConnection();
     }
 
+
+    @Override
+    public void insertOrUpdate(T objectData) {
+    }
 }

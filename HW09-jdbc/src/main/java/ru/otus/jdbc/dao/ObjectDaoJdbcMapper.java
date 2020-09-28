@@ -4,19 +4,15 @@ package ru.otus.jdbc.dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.core.dao.ObjectDao;
-import ru.otus.core.dao.ObjectDaoException;
-
-import ru.otus.core.model.User;
 import ru.otus.core.sessionmanager.SessionManager;
 import ru.otus.jdbc.DbExecutorImpl;
-import ru.otus.jdbc.mapper.*;
+import ru.otus.jdbc.mapper.EntityClassMetaData;
+import ru.otus.jdbc.mapper.EntitySQLMetaData;
+import ru.otus.jdbc.mapper.JdbcMapperImpl;
 import ru.otus.jdbc.sessionmanager.SessionManagerJdbc;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ObjectDaoJdbcMapper<T> implements ObjectDao<T> {
@@ -25,52 +21,40 @@ public class ObjectDaoJdbcMapper<T> implements ObjectDao<T> {
     private final SessionManagerJdbc sessionManager;
     private final DbExecutorImpl<T> dbExecutor;
     private final JdbcMapperImpl<T> jdbcMapper;
+    Class<T> clazz;
 
     private EntityClassMetaData entityClassMetaData;
     private EntitySQLMetaData entitySQLMetaData;
 
-    public ObjectDaoJdbcMapper(SessionManagerJdbc sessionManager, DbExecutorImpl<T> dbExecutor) {
+    public ObjectDaoJdbcMapper(SessionManagerJdbc sessionManager, DbExecutorImpl<T> dbExecutor, Class<T> clazz) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
+        this.clazz = clazz;
         jdbcMapper = new JdbcMapperImpl<T>(sessionManager, dbExecutor);
     }
 
     @Override
     public Optional<T> findById(long id) {
-        /*try {
-            return (Optional<T>) dbExecutor.executeSelect(getConnection(), "select id, name, age from user where id  = ?",
-                    id, rs -> {
-                        try {
-                            if (rs.next()) {
-                                return new User();
-                                //rs.getLong("id"), rs.getString("name"), rs.getInt("age")
-                            }
-                        } catch (SQLException e) {
-                            logger.error(e.getMessage(), e);
-                        }
-                        return null;
-                    });
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }*/
+        T object =  jdbcMapper.findById(id, clazz);
+        if (Objects.nonNull(object)) {
+            return Optional.of(object);
+        }
         return Optional.empty();
     }
 
     @Override
-    public long insertObject(T object) throws IllegalAccessException {
+    public long insertObject(T object) {
         jdbcMapper.insert(object);
         return jdbcMapper.getResultInsert();
     }
 
-
     @Override
     public void updateObject(T object) {
-
+        jdbcMapper.update(object);
     }
 
     @Override
     public void insertOrUpdate(T object) {
-
     }
 
     @Override

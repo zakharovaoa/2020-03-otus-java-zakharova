@@ -13,5 +13,5 @@ public interface DbExecutor<T> {
 
     Optional<T> executeSelect(Connection connection, String sql, long id, Function<ResultSet, T> rsHandler) throws SQLException;
 
-    //executeUpdate
+    void executeUpdate(Connection connection, String sql, List<Object> params) throws SQLException;
 }

@@ -3,6 +3,7 @@ package ru.otus.core.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.core.dao.ObjectDao;
+
 import java.util.Optional;
 
 public class DbServiceObjectImpl<T> implements DBServiceObject<T> {
@@ -19,11 +20,11 @@ public class DbServiceObjectImpl<T> implements DBServiceObject<T> {
         try (var sessionManager = objectDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                var userId = objectDao.insertObject(object);
+                var fieldId = objectDao.insertObject(object);
                 sessionManager.commitSession();
 
-                logger.info("created user: {}", userId);
-                return userId;
+                logger.info("created object: {}", fieldId);
+                return fieldId;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 sessionManager.rollbackSession();
@@ -38,8 +39,7 @@ public class DbServiceObjectImpl<T> implements DBServiceObject<T> {
             sessionManager.beginSession();
             try {
                 Optional<T> userOptional = objectDao.findById(id);
-
-                logger.info("user: {}", userOptional.orElse(null));
+                logger.info("object: {}", userOptional.orElse(null));
                 return userOptional;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -49,5 +49,23 @@ public class DbServiceObjectImpl<T> implements DBServiceObject<T> {
         }
     }
 
+    @Override
+    public void updateObject(T object) {
+        try (var sessionManager = objectDao.getSessionManager()) {
+            sessionManager.beginSession();
+            try {
+                objectDao.updateObject(object);
+                sessionManager.commitSession();
+                logger.info("update object");
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                sessionManager.rollbackSession();
+                throw new DbServiceException(e);
+            }
+        }
+    }
 
+    @Override
+    public void insertOrUpdate(T object) {
+    }
 }
