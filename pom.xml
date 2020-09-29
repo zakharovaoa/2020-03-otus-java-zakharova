@@ -28,6 +28,7 @@
         <module>HW05-byteCodes</module>
         <module>HW06-solid</module>
         <module>HW08-io</module>
+        <module>HW10-hibernate</module>
     </modules>
 
     <properties>
@@ -41,9 +42,8 @@
         <com.google.guava.version>28.2-jre</com.google.guava.version>
         <spring-framework-bom.version>5.2.2.RELEASE</spring-framework-bom.version>
         <commons-io.version>2.6</commons-io.version>
-        <javax.json-api.version>1.1.4</javax.json-api.version>
         <javax.json.version>1.1.4</javax.json.version>
-        <gson.version>2.8.6</gson.version>
+        <assertj-core.version>3.13.2</assertj-core.version>
     </properties>
 
 
@@ -65,67 +65,9 @@
 
 
             <!--region Test dependencies - JUnit Jupiter, AssertJ, Hamcrest, Mockito -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
 
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
 
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-params</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-junit-jupiter</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj.version}</version>
-                <scope>test</scope>
-            </dependency>
             <!--endregion-->
-
-
-            <dependency>
-                <groupId>javax.json</groupId>
-                <artifactId>javax.json-api</artifactId>
-                <version>${javax.json-api.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish</groupId>
-                <artifactId>javax.json</artifactId>
-                <version>${javax.json.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>${gson.version}</version>
-            </dependency>
 
         </dependencies>
     </dependencyManagement>
