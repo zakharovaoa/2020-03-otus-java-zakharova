@@ -28,6 +28,7 @@
         <module>HW05-byteCodes</module>
         <module>HW06-solid</module>
         <module>HW08-io</module>
+        <module>HW09-jdbc</module>
     </modules>
 
     <properties>
