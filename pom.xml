@@ -29,6 +29,7 @@
         <module>HW06-solid</module>
         <module>HW08-io</module>
         <module>HW09-jdbc</module>
+        <module>HW11-cache</module>
     </modules>
 
     <properties>
