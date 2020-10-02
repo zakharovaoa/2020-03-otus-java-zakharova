@@ -14,6 +14,10 @@ public class AddressDataSet {
     @Column(name = "street")
     private String street;
 
+
+    @OneToOne(mappedBy="address")
+    private User user;
+
     public AddressDataSet() {}
 
     public AddressDataSet(String street) {
@@ -34,6 +38,14 @@ public class AddressDataSet {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser(){
+        return this.user;
     }
 
     @Override

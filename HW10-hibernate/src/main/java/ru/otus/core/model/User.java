@@ -16,11 +16,11 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(targetEntity = AddressDataSet.class, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "add_id")
     private AddressDataSet address;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhoneDataSet> phones;
 
     public User() {
